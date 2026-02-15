@@ -2,233 +2,112 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Sentinel | Attendance Dashboard</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI Sentinel | Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
-        :root {
-            --neon-cyan: #22d3ee;
-            --neon-purple: #a855f7;
-            --dark-bg: #020617;
-        }
-
-        body {
-            background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
-            color: #f8fafc;
-            font-family: 'Rajdhani', sans-serif;
-            min-height: 100 vh;
-            overflow-x: hidden;
-        }
-
-        .main-container {
-            padding-top: 50px;
-        }
-
-        .header-title {
-            font-family: 'Orbitron', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            color: var(--neon-cyan);
-            text-shadow: 0 0 15px rgba(34, 211, 238, 0.5);
-        }
-
-        /* Glassmorphic Card */
-        .glass-card {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Video Container with Scanline Effect */
-        .video-wrapper {
-            position: relative;
-            display: inline-block;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 2px solid var(--neon-cyan);
-            box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
-        }
-
-        #video {
-            width: 100%;
-            max-width: 500px;
-            display: block;
-        }
-
-        .scanline {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--neon-cyan);
-            opacity: 0.7;
-            box-shadow: 0 0 10px var(--neon-cyan);
-            animation: scanning 3s linear infinite;
-            z-index: 10;
-        }
-
-        @keyframes scanning {
-            0% { top: 0; }
-            100% { top: 100%; }
-        }
-
-        /* Modern Buttons */
-        .btn-neon {
-            background: transparent;
-            border: 2px solid var(--neon-cyan);
-            color: var(--neon-cyan);
-            font-weight: bold;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-            padding: 12px 30px;
-            border-radius: 50px;
-        }
-
-        .btn-neon:hover {
-            background: var(--neon-cyan);
-            color: var(--dark-bg);
-            box-shadow: 0 0 20px var(--neon-cyan);
-        }
-
-        .btn-download {
-            border-color: #10b981;
-            color: #10b981;
-            margin-top: 20px;
-        }
-
-        .btn-download:hover {
-            background: #10b981;
-            box-shadow: 0 0 20px #10b981;
-        }
-
-        .status-box {
-            font-size: 1.2rem;
-            min-height: 40px;
-            color: var(--neon-cyan);
-            margin-top: 15px;
-        }
-
-        #log-list {
-            list-style: none;
-            padding: 0;
-            text-align: left;
-            font-size: 0.9rem;
-        }
-
-        .log-item {
-            padding: 8px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            color: #94a3b8;
-        }
+        :root { --neon-cyan: #22d3ee; --neon-red: #ef4444; --dark: #020617; }
+        body { background: radial-gradient(circle at center, #1e293b, #020617); color: white; font-family: 'Rajdhani', sans-serif; min-height: 100vh; margin: 0; padding: 20px; }
+        .glass-card { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .video-wrapper { position: relative; width: 100%; max-width: 600px; margin: 0 auto; border-radius: 20px; overflow: hidden; border: 2px solid var(--neon-cyan); background: #000; aspect-ratio: 4/3; }
+        #video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+        .scanline { position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: var(--neon-cyan); box-shadow: 0 0 20px var(--neon-cyan); z-index: 10; display: none; }
+        .scanning-active .scanline { display: block; animation: scanning 2.5s ease-in-out infinite; }
+        @keyframes scanning { 0%, 100% { top: 0%; } 50% { top: 100%; } }
+        .face-bracket { position: absolute; width: 30px; height: 30px; border: 3px solid var(--neon-cyan); z-index: 11; opacity: 0.5; }
+        .status-box { font-family: 'Orbitron'; color: var(--neon-cyan); margin: 15px 0; min-height: 30px; letter-spacing: 1px; }
+        .count-display { font-family: 'Orbitron'; font-size: 2.5rem; color: var(--neon-cyan); text-shadow: 0 0 15px var(--neon-cyan); }
+        .btn-neon { border-radius: 50px; padding: 10px 20px; font-weight: 700; text-transform: uppercase; font-size: 0.75rem; transition: 0.3s; }
+        .log-container { max-height: 200px; overflow-y: auto; }
+        @media (min-width: 992px) { .main-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; } }
     </style>
 </head>
 <body>
-
-<div class="container main-container text-center">
-    <h1 class="header-title mb-4">AI  Attendance System</h1>
-
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="glass-card">
-                <div class="video-wrapper mb-4">
-                    <div class="scanline"></div>
-                    <video id="video" autoplay muted></video>
-                    <canvas id="canvas" hidden></canvas>
-                </div>
-
-                <div id="status" class="status-box">SYSTEM INITIALIZING...</div>
-
-                <div class="d-flex justify-content-center gap-3 mt-4">
-                    <a href="/download" class="btn btn-neon btn-download">
-                        <i class="bi bi-download"></i> Download CSV Report
-                    </a>
-                </div>
-            </div>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items:center mb-4">
+            <h1 style="font-family:'Orbitron'; color:var(--neon-cyan); font-size:1.5rem;">AI ATTENDANCE</h1>
+            <button id="toggleBtn" onclick="toggleCamera()" class="btn btn-outline-success btn-neon">START CAMERA</button>
         </div>
 
-        <div class="col-md-3 mt-4 mt-md-0">
-            <div class="glass-card h-100">
-                <h5 class="text-info border-bottom pb-2">Recent Logs</h5>
-                <div id="log-list">
-                    <div class="log-item">Waiting for scan...</div>
+        <div class="main-grid">
+            <div class="glass-card text-center mb-4">
+                <div class="video-wrapper" id="vWrap">
+                    <div class="scanline"></div>
+                    <div class="face-bracket" style="top:20px;left:20px;border-right:0;border-bottom:0;"></div>
+                    <div class="face-bracket" style="top:20px;right:20px;border-left:0;border-bottom:0;"></div>
+                    <video id="video" autoplay playsinline muted></video>
+                    <canvas id="canvas" hidden></canvas>
+                </div>
+                <div id="status" class="status-box">SYSTEM READY</div>
+                <div class="d-flex justify-content-center gap-2">
+                    <a href="/download" class="btn btn-outline-info btn-neon"><i class="bi bi-download"></i> CSV</a>
+                    <button onclick="clearAttendance()" class="btn btn-outline-danger btn-neon"><i class="bi bi-trash"></i> RESET</button>
+                </div>
+            </div>
+
+            <div class="side-panel">
+                <div class="glass-card text-center mb-3">
+                    <div class="small opacity-50 font-monospace">PRESENT TODAY</div>
+                    <div id="count" class="count-display">0</div>
+                </div>
+                <div class="glass-card">
+                    <h6 class="small mb-3 font-monospace text-info">RECENT ACTIVITY</h6>
+                    <div id="logs" class="log-container small"></div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
+    <script>
+        const video = document.getElementById("video"), canvas = document.getElementById("canvas"), 
+              status = document.getElementById("status"), logs = document.getElementById("logs"),
+              vWrap = document.getElementById("vWrap"), toggleBtn = document.getElementById("toggleBtn");
+        let stream = null, isCapturing = false;
 
-<script>
-    const video = document.getElementById("video");
-    const canvas = document.getElementById("canvas");
-    const statusText = document.getElementById("status");
-    const logList = document.getElementById("log-list");
+        function speak(t) { window.speechSynthesis.cancel(); const m = new SpeechSynthesisUtterance(t); m.rate=1.1; window.speechSynthesis.speak(m); }
 
-    // Access Camera
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => { video.srcObject = stream; })
-        .catch(() => { statusText.innerText = "CAMERA ACCESS DENIED"; });
-
-    function addLog(name) {
-        const time = new Date().toLocaleTimeString();
-        const item = document.createElement("div");
-        item.className = "log-item";
-        item.innerHTML = `<span class="text-success">✔</span> ${name} - ${time}`;
-        logList.prepend(item);
-        if(logList.children.length > 5) logList.removeChild(logList.lastChild);
-    }
-
-    // Process every 1 second
-    setInterval(() => {
-        if (video.videoWidth === 0) return;
-
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas.getContext("2d").drawImage(video, 0, 0);
-
-        fetch("/process_frame", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ image: canvas.toDataURL("image/jpeg") })
-        })
-        .then(res => res.json())
-        .then(data => {
-            statusText.innerText = data.status.toUpperCase();
-            
-            // If recognized successfully
-            if (data.status.includes("Success")) {
-                const name = data.status.split(": ")[1];
-                // Only log in the UI if it's not a duplicate message
-                if (!statusText.dataset.lastUser || statusText.dataset.lastUser !== name) {
-                    addLog(name);
-                    statusText.dataset.lastUser = name;
-                }
+        async function toggleCamera() {
+            if (!stream) {
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+                video.srcObject = stream; isCapturing = true;
+                vWrap.classList.add("scanning-active");
+                toggleBtn.innerText = "STOP CAMERA"; toggleBtn.className = "btn btn-outline-danger btn-neon";
+            } else {
+                stream.getTracks().forEach(t => t.stop()); stream = null; isCapturing = false;
+                vWrap.classList.remove("scanning-active");
+                toggleBtn.innerText = "START CAMERA"; toggleBtn.className = "btn btn-outline-success btn-neon";
+                status.innerText = "SYSTEM STOPPED";
             }
-        });
-    }, 1000);
-    function quitSystem() {
-    if (confirm("WARNING: This will stop the entire server. Continue?")) {
-        fetch("/shutdown", { method: "POST" })
-        .then(() => {
-            // Update the screen so the user knows it worked
-            document.body.innerHTML = `
-                <div style="background:#020617; color:#ef4444; height:100vh; display:flex; 
-                            flex-direction:column; justify-content:center; align-items:center; font-family:Orbitron;">
-                    <h1>SYSTEM HALTED</h1>
-                    <p>The Flask server has been stopped. You can now close this tab.</p>
-                </div>`;
-        })
-        .catch(err => console.error("Shutdown failed:", err));
-    }
-}
-</script>
+        }
 
+        setInterval(() => {
+            if (!isCapturing || video.videoWidth === 0) return;
+            canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+            canvas.getContext("2d").drawImage(video, 0, 0);
+            fetch("/process_frame", { method: "POST", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ image: canvas.toDataURL("image/jpeg", 0.7) })
+            }).then(r => r.json()).then(d => {
+                status.innerText = d.status.toUpperCase();
+                if (d.status.includes("Success")) {
+                    let name = d.status.split(": ")[1];
+                    if (status.dataset.last !== name) {
+                        status.dataset.last = name; speak("Welcome " + name);
+                        const row = document.createElement("div"); row.innerHTML = `✔ ${name} - ${new Date().toLocaleTimeString()}`;
+                        logs.prepend(row); updateCount();
+                    }
+                } else if (d.status === "Scanning...") { status.dataset.last = ""; }
+            });
+        }, 1000);
+
+        function updateCount() { fetch('/get_count').then(r => r.json()).then(d => document.getElementById('count').innerText = d.count); }
+        function clearAttendance() {
+            const p = prompt("Password:");
+            fetch("/clear_logs", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ password: p }) })
+            .then(r => r.ok ? (logs.innerHTML="", updateCount(), alert("Cleared")) : alert("Denied"));
+        }
+        updateCount();
+    </script>
 </body>
 </html>
